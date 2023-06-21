@@ -3,3 +3,13 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+.idea/
+
+Workflow.Library/bin/
+Workflow.Library/obj/
+
+Workflow.Repository/bin/
+Workflow.Repository/obj/
+
+Workflow.Service/bin/
+Workflow.Service/obj/
