@@ -2,7 +2,7 @@
 
 namespace Workflow.Library;
 
-public class ObjectLibrary
+public static class ObjectLibrary
 {
     public static void CloneProperties(object source, object destination)
     {
