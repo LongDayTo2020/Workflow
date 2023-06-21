@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Workflow.Library\Workflow.Library.csproj" />
+      <ProjectReference Include="..\Workflow.Repository\Workflow.Repository.csproj" />
     </ItemGroup>
 
 </Project>

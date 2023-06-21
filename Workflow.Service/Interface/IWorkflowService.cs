@@ -7,7 +7,7 @@ public interface IWorkflowService
 {
     List<ResultWorkflow> GetAll();
 
-    ResultWorkflow Get(int workflowId);
+    ResultWorkflow? Get(int workflowId);
 
     bool Add(ParamWorkflow workflow);
 
