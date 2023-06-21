@@ -14,4 +14,5 @@ public interface IWorkflowService
     bool Update(int workflowId, ParamWorkflow workflow);
 
     bool Delete(int workflowId);
+    
 }
