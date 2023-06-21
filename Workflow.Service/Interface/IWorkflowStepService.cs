@@ -5,7 +5,7 @@ namespace Workflow.Service.Interface;
 
 public interface IWorkflowStepService
 {
-    ResultWorkflowStep? Get(int workflowId);
+    List<ResultWorkflowStep> Get(int workflowId);
 
     bool Add(ParamWorkflowStep workflowStep);
 

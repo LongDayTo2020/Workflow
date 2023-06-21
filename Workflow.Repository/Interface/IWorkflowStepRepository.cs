@@ -6,9 +6,9 @@ public interface IWorkflowStepRepository
 {
     IEnumerable<WorkflowStep> Query();
 
-    bool Create(WorkflowStep workflow);
+    bool Create(WorkflowStep workflowStep);
 
-    bool Update(WorkflowStep workflow);
+    bool Update(WorkflowStep workflowStep);
 
-    bool Delete(WorkflowStep workflow);
+    bool Delete(WorkflowStep workflowStep);
 }
