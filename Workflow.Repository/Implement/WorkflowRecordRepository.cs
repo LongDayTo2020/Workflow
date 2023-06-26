@@ -23,7 +23,7 @@ from workflow_records;
         return _dbConnection.Query<WorkflowRecord>(sql);
     }
 
-    public bool Create(WorkflowRecord workflow)
+    public WorkflowRecord? Create(WorkflowRecord workflow)
     {
         string sql = @"
 insert into workflow_records (workflow_id, priority, expiration_time, status, create_time, create_user)
@@ -33,9 +33,10 @@ values (
 @ExpirationTime, 
 @Status, 
 @CreateTime, 
-@CreateUser  );
+@CreateUser  )
+RETURNING *;
 ";
-        return _dbConnection.Execute(sql, workflow) > 0;
+        return _dbConnection.Query<WorkflowRecord>(sql, workflow).FirstOrDefault();
     }
 
     public bool Update(WorkflowRecord workflow)

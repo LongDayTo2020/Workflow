@@ -8,7 +8,7 @@ public class WorkflowRecordFile
     public string Name { get; set; } = "";
     public string ShowName { get; set; } = "";
     public string Type { get; set; } = "";
-    public int Length { get; set; }
+    public long Length { get; set; }
     public string? Location { get; set; } = "";
     public string? Description { get; set; }
     public TimeSpan CreateTime { get; set; }

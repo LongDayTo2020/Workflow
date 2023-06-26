@@ -6,7 +6,7 @@ public interface IWorkflowRecordRepository
 {
     IEnumerable<WorkflowRecord> Query();
 
-    bool Create(WorkflowRecord workflow);
+    WorkflowRecord? Create(WorkflowRecord workflow);
 
     bool Update(WorkflowRecord workflow);
 
