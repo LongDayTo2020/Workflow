@@ -1,0 +1,1 @@
+INSERT INTO public.workflow_records (id, workflow_id, priority, expiration_time, status, create_time, create_user, update_time, update_user) VALUES (6, 1, 2, '2023-07-30 00:00:00.000000', 'Finish', '2023-06-27 11:43:43.966939', '', null, null);
