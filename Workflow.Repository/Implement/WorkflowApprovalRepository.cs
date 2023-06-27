@@ -2,6 +2,7 @@
 using Dapper;
 using Workflow.Repository.DBEntity;
 using Workflow.Repository.Interface;
+using Workflow.Repository.Mapper;
 
 namespace Workflow.Repository.Implement;
 
@@ -21,12 +22,12 @@ public class WorkflowApprovalRepository : IWorkflowApprovalRepository
 select *
 from workflow_approvals;
 ";
+        SqlMapper.SetTypeMap(typeof(WorkflowApproval), new CustomMapper<WorkflowApproval>());
         return _dbConnection.Query<WorkflowApproval>(sql);
     }
 
     public bool Create(WorkflowApproval workflow)
     {
-        workflow.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflow_approvals (workflow_record_id, workflow_step_id, approver, description, approval_time,
                                 expiration_time, status, create_time, create_user)

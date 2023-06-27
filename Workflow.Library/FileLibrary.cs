@@ -11,7 +11,8 @@ public static class FileLibrary
 
         // Combine the directory path and the unique file name
         string filePath = Path.Combine(directoryPath, uniqueFileName);
-
+        // If path is not exists then create the path
+        if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
         // Save the file to the specified path
         await using var fileStream = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(fileStream);

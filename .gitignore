@@ -13,3 +13,5 @@ Workflow.Repository/obj/
 
 Workflow.Service/bin/
 Workflow.Service/obj/
+
+Workflow/RecordFile/

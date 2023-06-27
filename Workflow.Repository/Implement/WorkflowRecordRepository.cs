@@ -2,6 +2,7 @@
 using Dapper;
 using Workflow.Repository.DBEntity;
 using Workflow.Repository.Interface;
+using Workflow.Repository.Mapper;
 
 namespace Workflow.Repository.Implement;
 
@@ -20,6 +21,7 @@ public class WorkflowRecordRepository : IWorkflowRecordRepository
 select *
 from workflow_records;
 ";
+        SqlMapper.SetTypeMap(typeof(WorkflowRecord), new CustomMapper<WorkflowRecord>());
         return _dbConnection.Query<WorkflowRecord>(sql);
     }
 
@@ -37,6 +39,7 @@ values (
 @CreateUser  )
 RETURNING *;
 ";
+        SqlMapper.SetTypeMap(typeof(WorkflowRecord), new CustomMapper<WorkflowRecord>());
         return _dbConnection.Query<WorkflowRecord>(sql, workflow).FirstOrDefault();
     }
 

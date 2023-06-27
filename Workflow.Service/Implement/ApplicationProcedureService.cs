@@ -88,6 +88,7 @@ public class ApplicationProcedureService : IApplicationProcedureService
         var newRecord = new WorkflowRecord();
         ObjectLibrary.CloneProperties(applicationProcedure, newRecord);
         newRecord.Status = ProcedureStatus.WaitReview;
+        _dbConnection.Open();
         using var transaction = _dbConnection.BeginTransaction();
         try
         {
@@ -95,12 +96,12 @@ public class ApplicationProcedureService : IApplicationProcedureService
             newRecord = _workflowRecordRepository.Create(newRecord);
             if (newRecord == null) throw new Exception("新增失敗");
             //新增第一步資料
-            var firstStep = _workflowStepRepository.Query().OrderBy(o => o.Step)
-                .FirstOrDefault(x => x.WorkflowId == newRecord.WorkflowId);
+            var firstStep = _workflowStepRepository.Query()
+                .Where(x => x.WorkflowId == newRecord.WorkflowId).MinBy(o => o.Step);
             if (firstStep == null) throw new Exception("無第一步流程資料");
             var newStep = new WorkflowApproval()
             {
-                WorkflowRecordId = newRecord.WorkflowId,
+                WorkflowRecordId = newRecord.Id,
                 WorkflowStepId = firstStep.Id,
                 ExpirationTime = applicationProcedure.ExpirationTime,
                 Approver = applicationProcedure.Approver,
@@ -131,20 +132,22 @@ public class ApplicationProcedureService : IApplicationProcedureService
         if (record == null) throw new Exception("查無資料");
         var stepList = _workflowStepRepository.Query()
             .Where(x => x.WorkflowId == record.WorkflowId)
-            .OrderBy(o => o.Step)
-            .ToList();
+            .OrderBy(o => o.Step);
         var nowStep = stepList.FirstOrDefault(x => x.Id == workflowApproval.WorkflowStepId);
         if (nowStep == null) throw new Exception("查無資料");
         var nextStep = stepList.SkipWhile(x => x.Id == workflowApproval.WorkflowStepId)
-            .Skip(1)
             .FirstOrDefault(x => x.Id > workflowApproval.WorkflowStepId);
-        if (nextStep == null) throw new Exception("查無資料");
+        if (nextStep == null && nowStep.Final <= 0) throw new Exception("查無資料");
+        _dbConnection.Open();
         var transaction = _dbConnection.BeginTransaction();
         try
         {
             //同意目前的步驟
+            //判斷簽核是否符合指派簽核者
+            // if (workflowApproval.Approver != LoginUser.Account) throw new Exception("簽核者失敗");
             workflowApproval.Status = ProcedureStatus.Approval;
             workflowApproval.ApprovalTime = DateTime.Now;
+            workflowApproval.Description = judgment.Description;
             _workflowApprovalRepository.Update(workflowApproval);
             //是否最後一步
             if (nowStep.Final > 0)
@@ -158,6 +161,10 @@ public class ApplicationProcedureService : IApplicationProcedureService
                 var newApproval = new WorkflowApproval();
                 ObjectLibrary.CloneProperties(judgment, newApproval);
                 newApproval.WorkflowStepId = nextStep.Id;
+                newApproval.Status = ProcedureStatus.WaitReview;
+                newApproval.Approver = judgment.NextApprover;
+                newApproval.Description = "";
+                newApproval.ExpirationTime = judgment.NextExpirationTime;
                 _workflowApprovalRepository.Create(newApproval);
             }
 
@@ -187,7 +194,9 @@ public class ApplicationProcedureService : IApplicationProcedureService
         var transaction = _dbConnection.BeginTransaction();
         try
         {
-            //同意目前的步驟
+            //拒絕目前的步驟
+            //判斷簽核是否符合指派簽核者
+            // if (workflowApproval.Approver != LoginUser.Account) throw new Exception("簽核者失敗");
             workflowApproval.Status = ProcedureStatus.Reject;
             workflowApproval.ApprovalTime = DateTime.Now;
             _workflowApprovalRepository.Update(workflowApproval);
@@ -219,8 +228,9 @@ public class ApplicationProcedureService : IApplicationProcedureService
             applicationProcedureFile.WorkflowStepId.ToString());
         filePath = FileLibrary.SaveFileAsync(applicationProcedureFile.File, filePath).GetAwaiter().GetResult();
         newWorkflowFile.Length = applicationProcedureFile.File.Length;
-        newWorkflowFile.Name = applicationProcedureFile.File.FileName;
+        newWorkflowFile.Name = Path.GetFileName(filePath);
         newWorkflowFile.Type = applicationProcedureFile.File.ContentType;
+        newWorkflowFile.ShowName = applicationProcedureFile.File.FileName;
         newWorkflowFile.Location = filePath.Replace(_hostingEnvironment.ContentRootPath, string.Empty);
         return _workflowRecordFileRepository.Create(newWorkflowFile);
     }

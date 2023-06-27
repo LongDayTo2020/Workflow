@@ -8,5 +8,4 @@ public class ParamApplicationProcedureFile
     public int WorkflowStepId { get; set; }
     public IFormFile File { get; set; }
     public string? Description { get; set; }
-    public string ShowName { get; set; }
 }

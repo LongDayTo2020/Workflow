@@ -62,7 +62,7 @@ namespace Workflow.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult AddFile([FromBody] ParamApplicationProcedureFile applicationProcedureFile) =>
+        public IActionResult AddFile([FromForm] ParamApplicationProcedureFile applicationProcedureFile) =>
             Ok(_applicationProcedureService.AddFile(applicationProcedureFile));
 
         /// <summary>
