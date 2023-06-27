@@ -2,6 +2,7 @@
 using Dapper;
 using Workflow.Repository.DBEntity;
 using Workflow.Repository.Interface;
+using Workflow.Repository.Mapper;
 
 namespace Workflow.Repository.Implement;
 
@@ -17,11 +18,14 @@ public class WorkflowStepRepository : IWorkflowStepRepository
     public IEnumerable<WorkflowStep> Query()
     {
         string sql = @"select * from workflow_steps ";
+        // 設定自訂的類型映射
+        SqlMapper.SetTypeMap(typeof(WorkflowStep), new CustomMapper<WorkflowStep>());
         return _dbConnection.Query<WorkflowStep>(sql);
     }
 
     public bool Create(WorkflowStep workflowStep)
     {
+        workflowStep.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflow_steps (workflow_id, step, final, name, create_time, create_user)
 values (

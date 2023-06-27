@@ -18,9 +18,9 @@ namespace Workflow.Controllers
             _workflowStepService = workflowStepService;
         }
 
-        [HttpGet("[action]/{workflowStepId:int}")]
-        public IActionResult Get([FromRoute] int workflowStepId) =>
-            Ok(_workflowStepService.Get(workflowStepId));
+        [HttpGet("[action]/{workflowId:int}")]
+        public IActionResult Get([FromRoute] int workflowId) =>
+            Ok(_workflowStepService.Get(workflowId));
 
         [HttpPost("[action]")]
         public IActionResult Add([FromBody] ParamWorkflowStep workflowStep) =>

@@ -2,5 +2,5 @@
 
 public class ParamWorkflow
 {
-    
+    public string Name { get; set; } = "";
 }

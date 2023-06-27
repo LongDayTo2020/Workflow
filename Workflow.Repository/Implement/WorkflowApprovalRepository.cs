@@ -26,6 +26,7 @@ from workflow_approvals;
 
     public bool Create(WorkflowApproval workflow)
     {
+        workflow.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflow_approvals (workflow_record_id, workflow_step_id, approver, description, approval_time,
                                 expiration_time, status, create_time, create_user)

@@ -87,6 +87,7 @@ public class ApplicationProcedureService : IApplicationProcedureService
         bool result;
         var newRecord = new WorkflowRecord();
         ObjectLibrary.CloneProperties(applicationProcedure, newRecord);
+        newRecord.Status = ProcedureStatus.WaitReview;
         using var transaction = _dbConnection.BeginTransaction();
         try
         {
@@ -103,7 +104,8 @@ public class ApplicationProcedureService : IApplicationProcedureService
                 WorkflowStepId = firstStep.Id,
                 ExpirationTime = applicationProcedure.ExpirationTime,
                 Approver = applicationProcedure.Approver,
-                Description = applicationProcedure.Description
+                Description = applicationProcedure.Description,
+                Status = ProcedureStatus.WaitReview
             };
             _workflowApprovalRepository.Create(newStep);
             transaction.Commit();

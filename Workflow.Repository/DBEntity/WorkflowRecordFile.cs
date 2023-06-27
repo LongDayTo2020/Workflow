@@ -11,8 +11,8 @@ public class WorkflowRecordFile
     public long Length { get; set; }
     public string? Location { get; set; } = "";
     public string? Description { get; set; }
-    public TimeSpan CreateTime { get; set; }
+    public DateTime CreateTime { get; set; }
     public string CreateUser { get; set; } = "";
-    public TimeSpan? UpdateTime { get; set; }
+    public DateTime? UpdateTime { get; set; }
     public string? UpdateUser { get; set; }
 }

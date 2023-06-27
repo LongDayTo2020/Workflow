@@ -25,6 +25,7 @@ from workflow_records;
 
     public WorkflowRecord? Create(WorkflowRecord workflow)
     {
+        workflow.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflow_records (workflow_id, priority, expiration_time, status, create_time, create_user)
 values (

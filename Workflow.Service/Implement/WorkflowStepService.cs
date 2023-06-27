@@ -16,15 +16,19 @@ public class WorkflowStepService : IWorkflowStepService
         _workflowStepRepository = workflowStepRepository;
     }
 
-    public List<ResultWorkflowStep> Get(int workflowId) =>
-        _workflowStepRepository.Query()
-            .Where(x => x.WorkflowId == workflowId)
+    public List<ResultWorkflowStep> Get(int workflowId)
+    {
+        var a = _workflowStepRepository.Query()
+            .Where(x => x.WorkflowId == workflowId);
+        var s = a
             .Select(q =>
             {
                 var resultWorkflowStep = new ResultWorkflowStep();
                 ObjectLibrary.CloneProperties(q, resultWorkflowStep);
                 return resultWorkflowStep;
             }).ToList();
+        return s;
+    }
 
     public bool Add(ParamWorkflowStep workflowStep)
     {

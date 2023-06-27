@@ -24,6 +24,7 @@ from workflows;
 
     public bool Create(DBEntity.Workflow workflow)
     {
+        workflow.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflows (name, create_time, create_user)
 values (

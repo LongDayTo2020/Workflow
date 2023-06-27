@@ -9,7 +9,7 @@ public class WorkflowRecordFileRepository : IWorkflowRecordFileRepository
 {
     private readonly IDbConnection _dbConnection;
 
-    WorkflowRecordFileRepository(IDbConnection dbConnection)
+    public WorkflowRecordFileRepository(IDbConnection dbConnection)
     {
         _dbConnection = dbConnection;
     }
@@ -25,6 +25,7 @@ from workflow_record_files;
 
     public bool Create(WorkflowRecordFile workflow)
     {
+        workflow.CreateTime = DateTime.Now;
         string sql = @"
 insert into workflow_record_files (workflow_record_id, workflow_step_id, name, show_name, type, length, location,
         description, create_time, create_user)

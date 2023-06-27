@@ -1,5 +1,11 @@
 using System.Data;
+using System.Runtime.Loader;
 using Npgsql;
+using Workflow.Repository.Implement;
+using Workflow.Repository.Interface;
+using Workflow.Service.Implement;
+using Workflow.Service.Interface;
+using Workflow.StaticMethod;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +18,21 @@ builder.Services.AddSwaggerGen();
 
 var dbConnection = builder.Configuration.GetValue<string?>("ConnectionStrings:npgsql");
 builder.Services.AddScoped<IDbConnection>(provider => new NpgsqlConnection(dbConnection));
+
+#region DI Register
+
+builder.Services.AddScoped<IWorkflowApprovalRepository, WorkflowApprovalRepository>();
+builder.Services.AddScoped<IWorkflowRecordFileRepository, WorkflowRecordFileRepository>();
+builder.Services.AddScoped<IWorkflowRecordRepository, WorkflowRecordRepository>();
+builder.Services.AddScoped<IWorkflowRepository, WorkflowRepository>();
+builder.Services.AddScoped<IWorkflowStepRepository, WorkflowStepRepository>();
+
+builder.Services.AddScoped<IWorkflowStepService, WorkflowStepService>();
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
+builder.Services.AddScoped<IApplicationProcedureService, ApplicationProcedureService>();
+
+#endregion
+
 
 var app = builder.Build();
 
